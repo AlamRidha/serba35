@@ -1,13 +1,21 @@
 <?php
-$host = 'localhost';
-$username = 'root';
-$password = '';
-$database = 'tokoserba35';
+class Database
+{
+    private $host = "localhost";
+    private $db_name = "tokoserba35";
+    private $username = "root";
+    private $password = "";
+    public $conn;
 
-$conn = mysqli_connect($host, $username, $password, $database);
-
-if (!$conn) {
-    die("Koneksi database gagal: " . mysqli_connect_error());
+    public function getConnection()
+    {
+        $this->conn = null;
+        try {
+            $this->conn = new mysqli($this->host, $this->username, $this->password, $this->db_name);
+            $this->conn->set_charset("utf8");
+        } catch (mysqli_sql_exception $e) {
+            echo "Koneksi database gagal: " . $e->getMessage();
+        }
+        return $this->conn;
+    }
 }
-
-// echo "Koneksi database berhasil!";

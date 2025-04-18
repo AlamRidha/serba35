@@ -21,9 +21,9 @@ $sql_products = "CREATE TABLE IF NOT EXISTS products (
     id_product INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     nama_produk VARCHAR(100) NOT NULL,
     deskripsi TEXT,
-    Harga DECIMAL(10,2) NOT NULL,
-    Stok INT(11) NOT NULL DEFAULT 0,
-    Gambar VARCHAR(255)
+    harga DECIMAL(10,2) NOT NULL,
+    stok INT(11) NOT NULL DEFAULT 0,
+    gambar VARCHAR(255)
 )";
 
 // Query untuk membuat tabel orders

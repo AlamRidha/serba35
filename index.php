@@ -13,8 +13,8 @@ switch ($page) {
     case 'dashboard':
         include base_path('app/views/admin/dashboard.php');
         break;
-    case 'data_kategori':
-        include base_path('app/views/admin/data_kategori.php');
+    case 'data_product':
+        include base_path('app/views/admin/data_product.php');
         break;
     case 'home':
         include base_path('app/views/customer/home.php');

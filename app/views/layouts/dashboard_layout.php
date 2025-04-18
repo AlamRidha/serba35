@@ -83,8 +83,8 @@ include base_path('app/views/layouts/header.php');
 <!-- Sidebar -->
 <div class="sidebar" id="sidebar">
     <a href="<?= base_url('index.php?page=dashboard'); ?>">🏠 Dashboard</a>
-    <a href="<?= base_url('index.php?page=data_kategori'); ?>">📁 Data Kategori</a>
-    <a href="<?= base_url('index.php?page=data_produk'); ?>">📦 Data Produk</a>
+    <!-- <a href="<?= base_url('index.php?page=data_kategori'); ?>">📁 Data Kategori</a> -->
+    <a href="<?= base_url('index.php?page=data_product'); ?>">📦 Data Produk</a>
     <a href="<?= base_url('index.php?page=logout'); ?>">🚪 Keluar</a>
 </div>
 

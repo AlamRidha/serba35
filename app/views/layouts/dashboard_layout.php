@@ -82,9 +82,6 @@ include base_path('app/views/layouts/header.php');
     </div>
 </nav>
 
-
-
-
 <!-- Sidebar -->
 <div class="sidebar" id="sidebar">
     <a href="<?= base_url('index.php?page=dashboard'); ?>">🏠 Dashboard</a>

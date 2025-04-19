@@ -19,6 +19,9 @@ switch ($page) {
     case 'data_category':
         include base_path('app/views/admin/data_category.php');
         break;
+    case 'laporan_penjualan':
+        include base_path('app/views/admin/report.php');
+        break;
     case 'home':
         include base_path('app/views/customer/home.php');
         break;

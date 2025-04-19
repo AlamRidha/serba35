@@ -125,14 +125,23 @@ $orders = getAllOrders($keyword);
                         <p><strong>Customer:</strong> <?= htmlspecialchars($orderDetail['username']) ?></p>
                         <p><strong>Tanggal:</strong> <?= date('d-m-Y', strtotime($orderDetail['tanggal_order'])) ?></p>
 
-                        <div class="mb-3">
-                            <label for="modalStatus" class="form-label">Status Pesanan</label>
-                            <select name="status" id="modalStatus" class="form-select w-auto">
-                                <option value="pending" <?= $orderDetail['status'] === 'pending' ? 'selected' : '' ?>>Pending</option>
-                                <option value="diproses" <?= $orderDetail['status'] === 'diproses' ? 'selected' : '' ?>>Diproses</option>
-                                <option value="selesai" <?= $orderDetail['status'] === 'selesai' ? 'selected' : '' ?>>Selesai</option>
-                            </select>
-                        </div>
+                        <?php if ($orderDetail['status'] !== 'selesai'): ?>
+                            <div class="mb-3">
+                                <label for="modalStatus" class="form-label">Status Pesanan</label>
+                                <select name="status" id="modalStatus" class="form-select w-auto">
+                                    <option value="pending" <?= $orderDetail['status'] === 'pending' ? 'selected' : '' ?>>Pending</option>
+                                    <option value="diproses" <?= $orderDetail['status'] === 'diproses' ? 'selected' : '' ?>>Diproses</option>
+                                    <option value="selesai" <?= $orderDetail['status'] === 'selesai' ? 'selected' : '' ?>>Selesai</option>
+                                </select>
+                            </div>
+                        <?php else: ?>
+                            <div class="mb-3">
+                                <label class="form-label">Status Pesanan</label>
+                                <div class="form-control-plaintext">
+                                    <span class="badge bg-success">Selesai</span>
+                                </div>
+                            </div>
+                        <?php endif; ?>
 
                         <div class="table-responsive">
                             <table class="table table-bordered align-middle">

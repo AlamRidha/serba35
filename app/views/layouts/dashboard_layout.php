@@ -75,16 +75,23 @@ include base_path('app/views/layouts/header.php');
         <a class="navbar-brand" href="<?= base_url('index.php?page=dashboard'); ?>">Dashboard</a>
         <div class="d-flex ms-auto">
             <a href="<?= base_url('index.php?page=logout'); ?>" class="btn btn-outline-light me-2">Logout</a>
-            <button class="btn btn-light">⚙️ Setting</button>
+
+            <button class="btn btn-light" data-bs-toggle="modal" data-bs-target="#settingModal">⚙️ Setting</button>
+
         </div>
     </div>
 </nav>
+
+
+
 
 <!-- Sidebar -->
 <div class="sidebar" id="sidebar">
     <a href="<?= base_url('index.php?page=dashboard'); ?>">🏠 Dashboard</a>
     <a href="<?= base_url('index.php?page=data_category'); ?>">📁 Data Kategori</a>
     <a href="<?= base_url('index.php?page=data_product'); ?>">📦 Data Produk</a>
+    <a href="<?= base_url('index.php?page=data_order'); ?>">💵 Manajemen Pesanan</a>
+    <a href="<?= base_url('index.php?page=laporan_penjualan'); ?>">📓 Laporan Penjualan</a>
     <a href="<?= base_url('index.php?page=logout'); ?>">🚪 Keluar</a>
 </div>
 
@@ -97,6 +104,38 @@ include base_path('app/views/layouts/header.php');
         echo "<p>Halaman tidak ditemukan: <code>$content_view</code></p>";
     }
     ?>
+</div>
+
+<!-- Modal Pengaturan Akun -->
+<div class="modal fade" id="settingModal" tabindex="-1" aria-labelledby="settingModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <form method="POST" action="<?= base_url('index.php?page=setting') ?>" class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="settingModalLabel">⚙️ Pengaturan Akun</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <?php if (isset($_GET['success'])): ?>
+                    <div class="alert alert-success">Pengaturan berhasil diperbarui!</div>
+                <?php elseif (isset($_GET['error'])): ?>
+                    <div class="alert alert-danger">Gagal menyimpan perubahan.</div>
+                <?php endif; ?>
+
+                <div class="mb-3">
+                    <label for="username" class="form-label">Username Baru</label>
+                    <input type="text" name="username" id="username" class="form-control" value="<?= htmlspecialchars($_SESSION['user']['username']) ?>" required>
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password Baru</label>
+                    <input type="password" name="password" id="password" class="form-control" placeholder="Kosongkan jika tidak ingin mengganti">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">❌ Batal</button>
+                <button type="submit" class="btn btn-success">💾 Simpan</button>
+            </div>
+        </form>
+    </div>
 </div>
 
 

@@ -22,7 +22,9 @@ switch ($page) {
     case 'home':
         include base_path('app/views/customer/home.php');
         break;
-
+    case 'data_order':
+        include base_path('app/views/admin/data_order.php');
+        break;
     case 'logout':
         include base_path('app/controllers/LogoutController.php');
         break;

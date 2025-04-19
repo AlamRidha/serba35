@@ -7,9 +7,13 @@ $conn = $db->getConnection();
 function getAllProducts($keyword = null)
 {
     global $conn;
-    $query = "SELECT * FROM products";
+    // Updated query to include category name
+    $query = "SELECT p.*, c.nama_category 
+              FROM products p
+              LEFT JOIN categories c ON p.id_category = c.id_category";
+
     if ($keyword) {
-        $query .= " WHERE nama_produk LIKE '%" . mysqli_real_escape_string($conn, $keyword) . "%'";
+        $query .= " WHERE p.nama_produk LIKE '%" . mysqli_real_escape_string($conn, $keyword) . "%'";
     }
     $result = mysqli_query($conn, $query);
 
@@ -27,6 +31,7 @@ function createProduk($data, $file)
     $deskripsi = mysqli_real_escape_string($conn, $data['deskripsi']);
     $harga = mysqli_real_escape_string($conn, $data['harga']);
     $stok = mysqli_real_escape_string($conn, $data['stok']);
+    $id_category = mysqli_real_escape_string($conn, $data['id_category']);
 
     $gambar = '';
     if ($file['gambar']['error'] == 0) {
@@ -34,8 +39,9 @@ function createProduk($data, $file)
         move_uploaded_file($file['gambar']['tmp_name'], base_path($gambar));
     }
 
-    $query = "INSERT INTO products (nama_produk, deskripsi, harga, stok, gambar) 
-              VALUES ('$nama', '$deskripsi', '$harga', '$stok', '$gambar')";
+    // Updated query to include id_category
+    $query = "INSERT INTO products (nama_produk, deskripsi, harga, stok, gambar, id_category) 
+              VALUES ('$nama', '$deskripsi', '$harga', '$stok', '$gambar', '$id_category')";
     return mysqli_query($conn, $query);
 }
 
@@ -47,8 +53,11 @@ function updateProduk($id, $data, $file)
     $deskripsi = mysqli_real_escape_string($conn, $data['deskripsi']);
     $harga = mysqli_real_escape_string($conn, $data['harga']);
     $stok = mysqli_real_escape_string($conn, $data['stok']);
+    $id_category = mysqli_real_escape_string($conn, $data['id_category']);
 
-    $query = "UPDATE products SET nama_produk='$nama', deskripsi='$deskripsi', harga='$harga', stok='$stok'";
+    // Updated query to include id_category
+    $query = "UPDATE products SET nama_produk='$nama', deskripsi='$deskripsi', 
+              harga='$harga', stok='$stok', id_category='$id_category'";
 
     if ($file['gambar']['error'] == 0) {
         // Hapus gambar lama jika ada
@@ -85,7 +94,11 @@ function getProdukById($id)
 {
     global $conn;
     $id = mysqli_real_escape_string($conn, $id);
-    $query = "SELECT * FROM products WHERE id_product=$id LIMIT 1";
+    // Updated query to include category information
+    $query = "SELECT p.*, c.nama_category 
+              FROM products p
+              LEFT JOIN categories c ON p.id_category = c.id_category
+              WHERE p.id_product=$id LIMIT 1";
     $result = mysqli_query($conn, $query);
     return mysqli_fetch_assoc($result);
 }

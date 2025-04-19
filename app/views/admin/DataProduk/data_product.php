@@ -1,6 +1,7 @@
 <?php
 require_once base_path('app/config/Auth.php');
 require_once base_path('app/controllers/ProductController.php');
+require_once base_path('app/controllers/CategoryController.php');
 
 if (!isLoggedIn() || !isAdmin()) {
     header("Location: " . base_url('index.php?page=login'));
@@ -16,8 +17,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($_POST['action'] === 'add') {
             if (createProduk($_POST, $_FILES)) {
                 $success = "Produk berhasil ditambahkan!";
-                // Redirect to prevent form resubmission
-                // header("Location: " . base_url('index.php?page=data_product&success=' . urlencode($success)));
                 header("Location: " . base_url('index.php?page=data_product&success=' . urlencode($success)));
                 exit;
             } else {
@@ -61,6 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 // Ambil data dari controller
 $keyword = $_GET['search'] ?? null;
 $products = getAllProducts($keyword);
+$categories = getAllCategories();
 // $products = getAllProducts();
 ?>
 
@@ -102,8 +102,9 @@ $products = getAllProducts($keyword);
             <thead class="table-dark text-center">
                 <tr>
                     <th width="5%">No</th>
-                    <th width="20%">Nama Produk</th>
-                    <th width="25%">Deskripsi</th>
+                    <th width="15%">Nama Produk</th>
+                    <th width="10%">Kategori</th>
+                    <th width="20%">Deskripsi</th>
                     <th width="10%">Harga</th>
                     <th width="5%">Stok</th>
                     <th width="10%">Gambar</th>
@@ -117,6 +118,7 @@ $products = getAllProducts($keyword);
                         <tr>
                             <td class="text-center"><?= $no++ ?></td>
                             <td><?= htmlspecialchars($product['nama_produk']) ?></td>
+                            <td><?= htmlspecialchars($product['nama_category'] ?? 'Tidak ada kategori') ?></td>
                             <td><?= htmlspecialchars($product['deskripsi']) ?></td>
                             <td class="text-end">Rp<?= number_format($product['harga'], 0, ',', '.') ?></td>
                             <td class="text-center"><?= $product['stok'] ?></td>
@@ -134,6 +136,7 @@ $products = getAllProducts($keyword);
                                     data-deskripsi="<?= htmlspecialchars($product['deskripsi']) ?>"
                                     data-harga="<?= $product['harga'] ?>"
                                     data-stok="<?= $product['stok'] ?>"
+                                    data-category="<?= $product['id_category'] ?>"
                                     data-gambar="<?= $product['gambar'] ?>">
                                     <i class="fas fa-edit"></i> Edit
                                 </button>
@@ -147,7 +150,7 @@ $products = getAllProducts($keyword);
                     <?php endforeach; ?>
                 <?php else: ?>
                     <tr>
-                        <td colspan="7" class="text-center text-muted">
+                        <td colspan="8" class="text-center text-muted">
                             <i class="fas fa-info-circle"></i> Tidak ada data produk.
                         </td>
                     </tr>
@@ -157,6 +160,7 @@ $products = getAllProducts($keyword);
     </div>
 </div>
 
+</div>
 <!-- Modal Tambah Produk -->
 <div class="modal fade" id="modalTambahProduk" tabindex="-1" aria-labelledby="modalTambahLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -174,6 +178,16 @@ $products = getAllProducts($keyword);
                     <div class="mb-3">
                         <label for="nama_produk" class="form-label">Nama Produk</label>
                         <input type="text" class="form-control" name="nama_produk" required>
+                    </div>
+                    <!-- Category dropdown -->
+                    <div class="mb-3">
+                        <label for="id_category" class="form-label">Kategori</label>
+                        <select class="form-select" name="id_category" required>
+                            <option value="">-- Pilih Kategori --</option>
+                            <?php foreach ($categories as $category): ?>
+                                <option value="<?= $category['id_category'] ?>"><?= htmlspecialchars($category['nama_category']) ?></option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
                     <div class="mb-3">
                         <label for="deskripsi" class="form-label">Deskripsi</label>
@@ -229,6 +243,16 @@ $products = getAllProducts($keyword);
                     <div class="mb-3">
                         <label for="edit_nama_produk" class="form-label">Nama Produk</label>
                         <input type="text" class="form-control" name="nama_produk" id="edit_nama_produk" required>
+                    </div>
+                    <!-- Category dropdown -->
+                    <div class="mb-3">
+                        <label for="edit_id_category" class="form-label">Kategori</label>
+                        <select class="form-select" name="id_category" id="edit_id_category" required>
+                            <option value="">-- Pilih Kategori --</option>
+                            <?php foreach ($categories as $category): ?>
+                                <option value="<?= $category['id_category'] ?>"><?= htmlspecialchars($category['nama_category']) ?></option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
                     <div class="mb-3">
                         <label for="edit_deskripsi" class="form-label">Deskripsi</label>
@@ -298,7 +322,7 @@ $products = getAllProducts($keyword);
             "responsive": true,
             "columnDefs": [{
                     "orderable": false,
-                    "targets": [5, 6]
+                    "targets": [6, 7]
                 } // Disable sorting for image and action columns
             ],
             "order": [
@@ -355,6 +379,7 @@ $products = getAllProducts($keyword);
                 const deskripsi = this.getAttribute('data-deskripsi');
                 const harga = this.getAttribute('data-harga');
                 const stok = this.getAttribute('data-stok');
+                const category = this.getAttribute('data-category');
                 const gambar = this.getAttribute('data-gambar');
 
                 // Set values in edit modal
@@ -363,6 +388,11 @@ $products = getAllProducts($keyword);
                 document.getElementById('edit_deskripsi').value = deskripsi;
                 document.getElementById('edit_harga').value = harga;
                 document.getElementById('edit_stok').value = stok;
+
+                // Set category dropdown value
+                if (category) {
+                    document.getElementById('edit_id_category').value = category;
+                }
 
                 // Handle image preview
                 const currentImage = document.getElementById('current_image');
@@ -408,95 +438,3 @@ $products = getAllProducts($keyword);
         });
     });
 </script>
-<!-- <script>
-    $(document).ready(function() {
-        // Form tambah produk
-        $("#formTambahProduk").submit(function(e) {
-            e.preventDefault();
-
-            let formData = new FormData(this);
-
-            $.ajax({
-                url: "<?= base_url('index.php?page=data_product&action=store') ?>",
-                type: "POST",
-                data: formData,
-                contentType: false,
-                processData: false,
-                success: function(response) {
-                    $("#modalTambahProduk").modal('hide');
-                    alert("Produk berhasil ditambahkan!");
-                    location.reload();
-                },
-                error: function() {
-                    alert("Gagal menambahkan produk!");
-                }
-            });
-        });
-
-        // Form edit produk
-        $(".formEditProduk").submit(function(e) {
-            e.preventDefault();
-
-            let formData = new FormData(this);
-
-            $.ajax({
-                url: "<?= base_url('index.php?page=data_product&action=update') ?>",
-                type: "POST",
-                data: formData,
-                contentType: false,
-                processData: false,
-                success: function(response) {
-                    $(".modal").modal('hide');
-                    alert("Produk berhasil diperbarui!");
-                    location.reload();
-                },
-                error: function() {
-                    alert("Gagal memperbarui produk!");
-                }
-            });
-        });
-
-        // Hapus produk
-        $(".btnHapusProduk").click(function(e) {
-            e.preventDefault();
-
-            if (confirm("Yakin ingin menghapus produk ini?")) {
-                let id = $(this).data("id");
-
-                $.ajax({
-                    url: "<?= base_url('index.php?page=data_product&action=delete') ?>",
-                    type: "GET",
-                    data: {
-                        id_product: id
-                    },
-                    success: function(response) {
-                        alert("Produk berhasil dihapus!");
-                        location.reload();
-                    },
-                    error: function() {
-                        alert("Gagal menghapus produk!");
-                    }
-                });
-            }
-        });
-
-        // Pencarian produk dengan AJAX
-        $("#formCariProduk").submit(function(e) {
-            e.preventDefault();
-
-            let keyword = $("#keywordCari").val();
-
-            $.ajax({
-                url: "<?= base_url('index.php?page=data_product') ?>",
-                type: "GET",
-                data: {
-                    search: keyword
-                },
-                success: function(response) {
-                    // Perbarui tabel produk dengan hasil pencarian
-                    $("#productTableContainer").html($(response).find("#productTableContainer").html());
-                }
-            });
-        });
-    });
-</script> -->

@@ -16,14 +16,24 @@ $sql_users = "CREATE TABLE IF NOT EXISTS users (
     Role ENUM('admin','customer') NOT NULL
 )";
 
+// Query untuk membuat tabel categories
+$sql_categories = "CREATE TABLE IF NOT EXISTS categories (
+    id_category INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    nama_category VARCHAR(100) NOT NULL
+)";
+
 // Query untuk membuat tabel products
 $sql_products = "CREATE TABLE IF NOT EXISTS products (
     id_product INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    id_category INT(11) UNSIGNED NOT NULL,
     nama_produk VARCHAR(100) NOT NULL,
     deskripsi TEXT,
     harga DECIMAL(10,2) NOT NULL,
     stok INT(11) NOT NULL DEFAULT 0,
-    gambar VARCHAR(255)
+    gambar VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_category) REFERENCES categories(id_category) ON DELETE CASCADE ON UPDATE CASCADE
 )";
 
 // Query untuk membuat tabel orders
@@ -58,10 +68,11 @@ $sql_payments = "CREATE TABLE IF NOT EXISTS payments (
 
 $queries = [
     'users' => $sql_users,
+    'categories' => $sql_categories,
     'products' => $sql_products,
     'orders' => $sql_orders,
     'order_details' => $sql_order_details,
-    'payments' => $sql_payments,
+    'payments' => $sql_payments
 ];
 
 foreach ($queries as $tableName => $sql) {

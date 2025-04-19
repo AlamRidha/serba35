@@ -16,6 +16,9 @@ switch ($page) {
     case 'data_product':
         include base_path('app/views/admin/data_product.php');
         break;
+    case 'data_category':
+        include base_path('app/views/admin/data_category.php');
+        break;
     case 'home':
         include base_path('app/views/customer/home.php');
         break;

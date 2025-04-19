@@ -1,5 +1,5 @@
 <?php if (isLoggedIn()) : ?>
-    <a href="<?= base_url('index.php?page=logout') ?>" class="btn btn-danger">Logout</a>
+    <!-- <a href="<?= base_url('index.php?page=logout') ?>" class="btn btn-danger">Woi</a> -->
 <?php endif; ?>
 
 <!DOCTYPE html>

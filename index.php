@@ -22,6 +22,7 @@ switch ($page) {
     case 'home':
         include base_path('app/views/customer/home.php');
         break;
+
     case 'logout':
         include base_path('app/controllers/LogoutController.php');
         break;

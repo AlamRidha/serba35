@@ -22,6 +22,9 @@ switch ($page) {
     case 'laporan_penjualan':
         include base_path('app/views/admin/report.php');
         break;
+    case 'data_user':
+        include base_path('app/views/admin/data_user.php');
+        break;
     case 'home':
         include base_path('app/views/customer/home.php');
         break;

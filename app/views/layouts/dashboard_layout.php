@@ -89,6 +89,7 @@ include base_path('app/views/layouts/header.php');
     <a href="<?= base_url('index.php?page=data_product'); ?>">📦 Data Produk</a>
     <a href="<?= base_url('index.php?page=data_order'); ?>">💵 Manajemen Pesanan</a>
     <a href="<?= base_url('index.php?page=laporan_penjualan'); ?>">📓 Laporan Penjualan</a>
+    <a href="<?= base_url('index.php?page=data_user'); ?>">🧑Manajemen User</a>
     <a href="<?= base_url('index.php?page=logout'); ?>">🚪 Keluar</a>
 </div>
 

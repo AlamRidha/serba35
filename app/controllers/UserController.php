@@ -1,39 +1,83 @@
 <?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 require_once base_path('app/config/Database.php');
 
-class UserController
+$db = new Database();
+$conn = $db->getConnection();
+
+// Ambil semua user
+function getAllUsers($keyword = null)
 {
-    public static function settingPage()
-    {
-        include base_path('app/views/pages/setting.php');
+    global $conn;
+    $query = "SELECT * FROM users";
+
+    if ($keyword) {
+        $escapedKeyword = mysqli_real_escape_string($conn, $keyword);
+        $query .= " WHERE username LIKE '%$escapedKeyword%'";
     }
 
-    public static function updateSetting()
-    {
-        session_start();
-        global $conn;
+    $result = mysqli_query($conn, $query);
+    $data = [];
 
-        if (!isset($_SESSION['user'])) {
-            header("Location: " . base_url('index.php?page=login'));
-            exit;
-        }
-
-        $id_user = $_SESSION['user']['id_user'];
-        $new_username = mysqli_real_escape_string($conn, $_POST['username']);
-        $new_password = !empty($_POST['password']) ? password_hash($_POST['password'], PASSWORD_DEFAULT) : null;
-
-        $query = "UPDATE users SET username = '$new_username'";
-        if ($new_password) {
-            $query .= ", password = '$new_password'";
-        }
-        $query .= " WHERE id_user = $id_user";
-
-        if (mysqli_query($conn, $query)) {
-            $_SESSION['user']['username'] = $new_username;
-            header("Location: " . base_url('index.php?page=setting&success=1'));
-        } else {
-            header("Location: " . base_url('index.php?page=setting&error=1'));
-        }
-        exit;
+    while ($row = mysqli_fetch_assoc($result)) {
+        $data[] = $row;
     }
+
+    return $data;
+}
+
+// Tambah user
+function createUser($data)
+{
+    global $conn;
+    $username = mysqli_real_escape_string($conn, $data['username']);
+    $password = password_hash($data['password'], PASSWORD_DEFAULT);
+    $role = mysqli_real_escape_string($conn, $data['Role']);
+
+    $query = "INSERT INTO users (username, password, Role) 
+              VALUES ('$username', '$password', '$role')";
+
+    return mysqli_query($conn, $query);
+}
+
+// Update user
+function updateUser($id, $data)
+{
+    global $conn;
+    $id = mysqli_real_escape_string($conn, $id);
+    $username = mysqli_real_escape_string($conn, $data['username']);
+    $role = mysqli_real_escape_string($conn, $data['Role']);
+
+    $query = "UPDATE users SET username='$username', Role='$role'";
+
+    if (!empty($data['password'])) {
+        $password = password_hash($data['password'], PASSWORD_DEFAULT);
+        $query .= ", password='$password'";
+    }
+
+    $query .= " WHERE id_user=$id";
+
+    return mysqli_query($conn, $query);
+}
+
+// Hapus user
+function deleteUser($id)
+{
+    global $conn;
+    $id = mysqli_real_escape_string($conn, $id);
+    $query = "DELETE FROM users WHERE id_user=$id";
+    return mysqli_query($conn, $query);
+}
+
+// Ambil user berdasarkan ID
+function getUserById($id)
+{
+    global $conn;
+    $id = mysqli_real_escape_string($conn, $id);
+    $query = "SELECT * FROM users WHERE id_user=$id LIMIT 1";
+    $result = mysqli_query($conn, $query);
+    return mysqli_fetch_assoc($result);
 }

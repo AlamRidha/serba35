@@ -21,19 +21,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $user = $result->fetch_assoc();
 
     // Validasi user
-    // if ($user && password_verify($password, $user['password'])) {
-    if ($user && $password) {
+    if ($user && password_verify($password, $user['password'])) {
+        // if ($user && $password) {
         $_SESSION['user'] = [
             'id' => $user['id_user'],
             'username' => $user['username'],
             'role' => $user['Role']
         ];
 
-        if ($user['Role'] === 'admin') {
-            header("Location: " . base_url('index.php?page=dashboard'));
-        } else {
-            header("Location: " . base_url('index.php?page=home'));
-        }
+        // Set status login success
+        $_SESSION['login_success'] = true;
+        $_SESSION['login_message'] = 'Login berhasil! Selamat datang, ' . $user['username'];
+
+        // if ($user['Role'] === 'admin') {
+        //     header("Location: " . base_url('index.php?page=dashboard'));
+        // } else {
+        //     header("Location: " . base_url('index.php?page=home'));
+        // }
+        header("Location: " . base_url('index.php?page=login'));
         exit;
     } else {
         $error = "Username atau password salah!";

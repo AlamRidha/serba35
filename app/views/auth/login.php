@@ -1,6 +1,6 @@
 <?php
 
-if (isLoggedIn()) {
+if (isLoggedIn() && !isset($_SESSION['login_success'])) {
     $role = $_SESSION['user']['role'];
     if ($role === 'admin') {
         header("Location: " . base_url('index.php?page=dashboard'));
@@ -19,6 +19,8 @@ if (isLoggedIn()) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
+    <!-- SweetAlert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
@@ -60,6 +62,27 @@ if (isLoggedIn()) {
 
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+
+    <?php if (isset($_SESSION['login_success']) && $_SESSION['login_success']): ?>
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Login Berhasil!',
+                text: '<?= $_SESSION['login_message'] ?>',
+                timer: 2000,
+                showConfirmButton: false
+            }).then(() => {
+                window.location.href = "<?= base_url('index.php?page=' . ($_SESSION['user']['role'] === 'admin' ? 'dashboard' : 'home')) ?>";
+            });
+        </script>
+        <?php
+        // Hapus session flash
+        unset($_SESSION['login_success']);
+        unset($_SESSION['login_message']);
+        ?>
+    <?php endif; ?>
+
+
 </body>
 
 </html>

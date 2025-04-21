@@ -31,6 +31,9 @@ switch ($page) {
     case 'data_order':
         include base_path('app/views/admin/data_order.php');
         break;
+    case 'setting':
+        include base_path('app/views/layouts/Setting/setting.php');
+        break;
     case 'logout':
         include base_path('app/controllers/LogoutController.php');
         break;

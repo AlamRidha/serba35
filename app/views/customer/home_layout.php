@@ -20,7 +20,9 @@ include base_path('app/views/layouts/header.php');
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
-        <a class="navbar-brand" href="<?= base_url('index.php?page=home'); ?>">Toko Serba 35</a>
+        <a class="navbar-brand" href="<?= base_url('index.php?page=home'); ?>">
+            <img src="<?= base_url('assets/img/grocery.gif') ?>" alt="imageicon" class="rounded me-2" width="40" height="40"> Toko Serba 35
+        </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>

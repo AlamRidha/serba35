@@ -18,7 +18,7 @@ function formatTanggalIndo($datetimeStr)
         IntlDateFormatter::SHORT,
         'Asia/Jakarta',
         IntlDateFormatter::GREGORIAN,
-        "EEEE, d MMMM yyyy '•' HH:mm"
+        "EEEE, d MMMM yyyy '/' HH:mm"
     );
 
     $timestamp = strtotime($datetimeStr);

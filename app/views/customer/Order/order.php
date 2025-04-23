@@ -35,7 +35,7 @@ while ($row = mysqli_fetch_assoc($result)) {
             <thead class="table-dark text-center">
                 <tr>
                     <th>ID Order</th>
-                    <th>Tanggal</th>
+                    <th>Tanggal & Waktu Pemesanan</th>
                     <th>Status</th>
                     <th>Produk</th>
                 </tr>

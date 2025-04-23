@@ -57,10 +57,21 @@ function getOrderById($id_order)
     global $conn;
     $id_order = mysqli_real_escape_string($conn, $id_order);
 
-    $query = "SELECT o.*, u.username 
-              FROM orders o 
-              JOIN users u ON o.id_user = u.id_user
-              WHERE o.id_order = '$id_order' LIMIT 1";
+    // $query = "SELECT o.*, u.username 
+    //           FROM orders o 
+    //           JOIN users u ON o.id_user = u.id_user
+    //           WHERE o.id_order = '$id_order' LIMIT 1";
+
+    $query = "SELECT  o.*, 
+                    u.username,
+                    IFNULL(pay.bukti_transfer,'')   AS bukti_transfer,
+                    IFNULL(pay.metode,'')           AS metode_bayar,
+                    pay.tanggal_bayar
+            FROM orders o
+            JOIN users u          ON u.id_user  = o.id_user
+            LEFT JOIN payments pay ON pay.id_order = o.id_order
+            WHERE o.id_order = '$id_order'
+            LIMIT 1";
 
     $result = mysqli_query($conn, $query);
     return mysqli_fetch_assoc($result);
@@ -82,16 +93,16 @@ function getOrderDetails($id_order)
     $id_order = mysqli_real_escape_string($conn, $id_order);
 
     $query = "SELECT
-    od.id_detail,
-    od.id_order,
-    od.id_product,
-    od.jumlah,
-    od.subtotal,
-    p.nama_produk,
-    p.harga
-FROM order_details od
-JOIN products p ON od.id_product = p.id_product
-WHERE od.id_order = '$id_order'";
+        od.id_detail,
+        od.id_order,
+        od.id_product,
+        od.jumlah,
+        od.subtotal,
+        p.nama_produk,
+        p.harga
+    FROM order_details od
+    JOIN products p ON od.id_product = p.id_product
+    WHERE od.id_order = '$id_order'";
 
 
     $result = mysqli_query($conn, $query);

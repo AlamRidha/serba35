@@ -125,6 +125,22 @@ $orders = getAllOrders($keyword);
                         <p><strong>Customer:</strong> <?= htmlspecialchars($orderDetail['username']) ?></p>
                         <p><strong>Tanggal:</strong> <?= date('d-m-Y', strtotime($orderDetail['tanggal_order'])) ?></p>
 
+                        <!-- Bukti transfer (jika ada) -->
+                        <?php if (!empty($orderDetail['bukti_transfer'])): ?>
+                            <div class="mb-3">
+                                <label class="form-label d-block"><strong>Bukti Pembayaran:</strong></label>
+                                <a href="<?= base_url('uploads/bukti/' . $orderDetail['bukti_transfer']) ?>" target="_blank">
+                                    <img src="<?= base_url('uploads/bukti/' . $orderDetail['bukti_transfer']) ?>"
+                                        alt="Bukti Pembayaran"
+                                        class="img-thumbnail"
+                                        style="max-width:220px">
+                                </a>
+                            </div>
+                        <?php else: ?>
+                            <div class="alert alert-warning py-1">Belum ada bukti pembayaran.</div>
+                        <?php endif; ?>
+
+
                         <?php if ($orderDetail['status'] !== 'selesai'): ?>
                             <div class="mb-3">
                                 <label for="modalStatus" class="form-label">Status Pesanan</label>

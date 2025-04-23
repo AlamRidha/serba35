@@ -18,7 +18,6 @@ if (isset($_GET['action']) && $_GET['action'] === 'remove' && isset($_GET['id'])
     }
 }
 
-
 $total = 0;
 foreach ($cart as $item) {
     $total += $item['harga'] * $item['jumlah'];
@@ -27,7 +26,6 @@ foreach ($cart as $item) {
 
 <div class="container py-4">
     <h2>Keranjang Belanja</h2>
-
 
     <?php if (empty($cart)) : ?>
         <p>Keranjang kosong.</p>
@@ -45,7 +43,6 @@ foreach ($cart as $item) {
             </thead>
             <tbody>
                 <?php foreach ($cart as $id => $item) : ?>
-
                     <tr>
                         <td><?= htmlspecialchars($item['nama_produk']) ?></td>
                         <td>Rp <?= number_format($item['harga'], 0, ',', '.') ?></td>
@@ -55,9 +52,6 @@ foreach ($cart as $item) {
                             <a href="index.php?page=cart&action=remove&id=<?= $id ?>"
                                 class="btn btn-sm btn-danger btn-remove-cart"
                                 data-id="<?= $id ?>">Hapus</a>
-
-                            <!-- <a href="index.php?page=cart&action=remove&id=<?= $id ?>" class="btn btn-sm btn-danger" onclick="return confirm('Hapus produk dari keranjang?')">Hapus</a> -->
-                            <!-- <a href="hapus_keranjang.php?id=<?= $id ?>" class="btn btn-sm btn-danger">Hapus</a> -->
                         </td>
                     </tr>
                 <?php endforeach; ?>
@@ -70,20 +64,25 @@ foreach ($cart as $item) {
             </tfoot>
         </table>
 
-        <form action="proses_checkout.php" method="POST" enctype="multipart/form-data">
-            <div class="mb-3">
-                <label for="metode">Metode Pembayaran:</label>
-                <select name="metode" class="form-select" required>
-                    <option value="Transfer Bank">Transfer Bank</option>
-                    <option value="QRIS">QRIS</option>
-                </select>
-            </div>
-            <div class="mb-3">
-                <label for="bukti">Upload Bukti Transfer:</label>
-                <input type="file" name="bukti" class="form-control" required>
-            </div>
-            <button type="submit" class="btn btn-primary">Checkout</button>
-        </form>
+        <?php if (!empty($cart)) : ?>
+            <form action="index.php?page=checkout" method="POST" enctype="multipart/form-data">
+                <input type="hidden" name="total" value="<?= $total ?>">
+                <div class="mb-3">
+                    <label for="metode">Metode Pembayaran:</label>
+                    <select name="metode" class="form-select" required>
+                        <option value="">-- Pilih Metode --</option>
+                        <option value="Transfer Bank">Transfer Bank</option>
+                        <option value="QRIS">QRIS</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="bukti">Upload Bukti Transfer:</label>
+                    <input type="file" name="bukti" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Checkout</button>
+            </form>
+        <?php endif; ?>
+
     <?php endif; ?>
 </div>
 
@@ -123,3 +122,14 @@ foreach ($cart as $item) {
         });
     });
 </script>
+
+<?php if (isset($_GET['success']) && $_GET['success'] == 1): ?>
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Checkout berhasil!',
+            text: 'Pesanan kamu sedang diproses.',
+            showConfirmButton: true
+        });
+    </script>
+<?php endif; ?>

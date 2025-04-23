@@ -65,7 +65,7 @@
 
 
 <!-- AJAX -->
-<div class="container py-4 rounded-3" style="background: linear-gradient(to right,rgb(23, 107, 232),rgb(60, 118, 199));">
+<div class="container py-4 rounded-3" style="background: linear-gradient(to right,rgb(23, 107, 232),rgb(218, 15, 15));">
     <h2 class="mb-4">Daftar Produk</h2>
 
     <!-- Search -->

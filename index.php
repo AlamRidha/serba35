@@ -34,6 +34,9 @@ switch ($page) {
     case 'cart':
         include base_path('app/views/customer/cart.php');
         break;
+    case 'checkout':
+        include base_path('app/controllers/CheckoutController.php');
+        break;
     case 'data_order':
         include base_path('app/views/admin/data_order.php');
         break;

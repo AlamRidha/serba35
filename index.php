@@ -55,6 +55,12 @@ switch ($page) {
     case 'proses_login':
         include 'app/controllers/AuthController.php';
         break;
+    case 'register':
+        include base_path('app/views/auth/register.php');
+        break;
+    case 'proses_register':
+        include base_path('app/controllers/RegisterController.php');
+        break;
     default:
         echo "404 Page Not Found";
         break;

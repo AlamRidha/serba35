@@ -81,3 +81,39 @@ function getUserById($id)
     $result = mysqli_query($conn, $query);
     return mysqli_fetch_assoc($result);
 }
+
+// ========== REGISTER USER ==========
+function registerUser($username, $password, $role = 'customer')
+{
+    global $conn;
+
+    // ‑‑ Sanitasi & validasi sederhana
+    $username = trim($username);
+    if ($username === '' || strlen($password) < 6) {
+        return ['success' => false, 'error' => 'Data tidak valid'];
+    }
+
+    // Cek username unik
+    $escaped = mysqli_real_escape_string($conn, $username);
+    $check   = mysqli_query(
+        $conn,
+        "SELECT id_user FROM users WHERE username = '$escaped' LIMIT 1"
+    );
+    if (mysqli_num_rows($check) > 0) {
+        return ['success' => false, 'error' => 'Username sudah dipakai'];
+    }
+
+    // Simpan
+    $hash = password_hash($password, PASSWORD_DEFAULT);
+    $role = mysqli_real_escape_string($conn, $role);
+
+    $ok = mysqli_query(
+        $conn,
+        "INSERT INTO users (username, password, Role)
+         VALUES ('$escaped', '$hash', '$role')"
+    );
+
+    return $ok
+        ? ['success' => true]
+        : ['success' => false, 'error' => 'Gagal menyimpan ke database'];
+}

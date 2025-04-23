@@ -31,6 +31,9 @@ switch ($page) {
     case 'data_product_c':
         include base_path('app/views/customer/data_product.php');
         break;
+    case 'cart':
+        include base_path('app/views/customer/cart.php');
+        break;
     case 'data_order':
         include base_path('app/views/admin/data_order.php');
         break;

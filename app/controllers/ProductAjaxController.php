@@ -138,6 +138,21 @@ if ($action === 'detail' && isset($_GET['id'])) {
                 <p><?= htmlspecialchars($row['deskripsi']) ?></p>
                 <p class="fw-bold text-primary fs-5">Rp <?= number_format($row['harga'], 0, ',', '.') ?></p>
                 <p>Stok: <?= $row['stok'] ?></p>
+
+                <?php if ($row['stok'] > 0) : ?>
+                    <div class="mb-2">
+                        <label for="qty">Jumlah:</label>
+                        <input type="number" class="form-control" id="qty" value="1" min="1" max="<?= $row['stok'] ?>">
+                    </div>
+                    <button class="btn btn-success w-100 btn-add-to-cart"
+                        data-id="<?= $row['id_product'] ?>"
+                        data-nama="<?= htmlspecialchars($row['nama_produk']) ?>"
+                        data-harga="<?= $row['harga'] ?>">
+                        + Tambah ke Keranjang
+                    </button>
+                <?php else : ?>
+                    <div class="alert alert-danger">Stok Habis</div>
+                <?php endif; ?>
             </div>
         </div>
 <?php

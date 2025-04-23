@@ -56,6 +56,11 @@
         color: white;
         border-color: #0d6efd;
     }
+
+    .pagination .page-item.disabled .page-link {
+        pointer-events: none;
+        opacity: 0.6;
+    }
 </style>
 
 
@@ -164,5 +169,45 @@
 
         // Load awal
         fetchProducts();
+    });
+
+    // Tambah ke keranjang
+    document.addEventListener("click", function(e) {
+        if (e.target.classList.contains("btn-add-to-cart")) {
+            const id = e.target.dataset.id;
+            const nama = e.target.dataset.nama;
+            const harga = e.target.dataset.harga;
+            const qty = document.getElementById("qty").value;
+
+            fetch("app/controllers/CartController.php", {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: `action=add&id=${id}&nama=${encodeURIComponent(nama)}&harga=${harga}&qty=${qty}`
+                })
+                .then(res => res.json())
+                .then(res => {
+                    if (res.success) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil',
+                            text: 'Produk berhasil ditambahkan ke keranjang!',
+                            timer: 1000,
+                            timerProgressBar: true,
+                            showConfirmButton: false
+                        })
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Gagal',
+                            text: 'Produk gagal ditambahkan ke keranjang!',
+                            timer: 3000,
+                            timerProgressBar: true
+                        })
+                    }
+                })
+                .catch(err => console.error("Cart error", err));
+        }
     });
 </script>

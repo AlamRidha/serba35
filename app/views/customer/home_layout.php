@@ -39,10 +39,10 @@ include base_path('app/views/layouts/header.php');
                     <a class="nav-link <?= ($_GET['page'] ?? '') === 'data_product_c' ? 'active' : '' ?>" href="<?= base_url('index.php?page=data_product_c'); ?>">Data Produk</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link <?= ($_GET['page'] ?? '') === 'order' ? 'active' : '' ?>" href="<?= base_url('index.php?page=order'); ?>">Order</a>
+                    <a class="nav-link <?= ($_GET['page'] ?? '') === 'order_c' ? 'active' : '' ?>" href="<?= base_url('index.php?page=order_c'); ?>">Order</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link <?= ($_GET['page'] ?? '') === 'riwayat' ? 'active' : '' ?>" href="<?= base_url('index.php?page=riwayat'); ?>">Riwayat</a>
+                    <a class="nav-link <?= ($_GET['page'] ?? '') === 'riwayat_c' ? 'active' : '' ?>" href="<?= base_url('index.php?page=riwayat_c'); ?>">Riwayat</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="<?= base_url('index.php?page=logout'); ?>">Logout</a>

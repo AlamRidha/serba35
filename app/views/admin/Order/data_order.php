@@ -111,8 +111,8 @@ $orders = getAllOrders($keyword);
 </div>
 
 <!-- Modal Detail Pesanan -->
-<div class="modal fade <?= $showDetailModal ? 'show' : '' ?>" id="orderDetailModal" tabindex="-1" aria-labelledby="orderDetailModalLabel" aria-hidden="true" <?= $showDetailModal ? 'style="display: block;"' : '' ?>>
-    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+<div class="modal fade" id="orderDetailModal" tabindex="-1" aria-labelledby="orderDetailModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <form method="POST" action="<?= base_url('index.php?page=data_order') ?>">
                 <input type="hidden" name="id_order" value="<?= $orderDetail ? $orderDetail['id_order'] : '' ?>">
@@ -203,11 +203,30 @@ $orders = getAllOrders($keyword);
 </div>
 
 <?php if ($showDetailModal): ?>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var orderDetailModal = new bootstrap.Modal(document.getElementById('orderDetailModal'));
+            orderDetailModal.show();
+
+            // Menangani redirect saat modal ditutup
+            document.querySelectorAll('.btn-close, .btn-secondary').forEach(function(element) {
+                element.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    orderDetailModal.hide();
+                    setTimeout(function() {
+                        window.location.href = '<?= base_url('index.php?page=data_order') ?>';
+                    }, 100);
+                });
+            });
+        });
+    </script>
+<?php endif; ?>
+<!-- <?php if ($showDetailModal): ?>
     <div class="modal-backdrop fade show"></div>
     <script>
         document.body.classList.add('modal-open');
     </script>
-<?php endif; ?>
+<?php endif; ?> -->
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {

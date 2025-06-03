@@ -53,7 +53,7 @@ if (isLoggedIn() && !isset($_SESSION['login_success'])) {
                         </form>
                     </div>
                     <div class="card-footer text-center py-3">
-                        <div class="small"><a href="<?= base_url('index.php?page=register'); ?>">Belum punya akun? Daftar di sini</a></div>
+                        <div class="small"><a href="<?= base_url('index.php?page=register'); ?>" style="text-decoration: none">Belum punya akun? Daftar di sini</a></div>
                     </div>
                 </div>
             </div>
